@@ -1,31 +1,23 @@
+<!doctype html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Exercício 4 - Verificar Tipo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style.css">
 </head>
-
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">Atividades JS</a>
-        </div>
-    </nav>
-
-    <main class="container">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h1 class="card-title h4">Exercício 4 — Verificar tipo do dado</h1>
-                <p class="card-text">Solicita um dado via teclado; pergunta se o usuário quer verificar o tipo. Se
-                    confirmar, escreve o tipo no corpo da página; caso contrário exibe mensagem de agradecimento.</p>
-                <button id="btnExec4" class="btn btn-primary">Executar</button>
-                <a href="index.html" class="btn btn-outline-secondary ms-2">Voltar</a>
-            </div>
+<body>
+    <div class="glass">
+        <h1>Projeto de JavaScript - Laboratório de Engenharia de Software</h1>
+        <h2>Exercício 4 — Verificar tipo do dado</h2>
+        <p>Solicita um dado via teclado; pergunta se o usuário quer verificar o tipo. Se confirmar, escreve o tipo no corpo da página; caso contrário exibe mensagem de agradecimento.</p>
+        <div style="margin-top:18px;">
+            <button id="btnExec4" class="btn btn-primary">Executar</button>
+            <a href="semana01.html" class="btn btn-outline-secondary ms-2">Voltar</a>
         </div>
         <div id="saida" class="mt-3"></div>
-    </main>
+    </div>
 
     <script>
         function detectarTipo(raw) {
@@ -55,7 +47,5 @@
             saidaEl.innerHTML = '<div class="alert alert-success">Tipo do dado informado: <strong>' + tipo + '</strong></div>';
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
