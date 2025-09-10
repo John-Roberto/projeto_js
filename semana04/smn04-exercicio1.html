@@ -2,26 +2,476 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Semana 4 - Exercício 1 - Placeholder</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Semana 4 - Exercício 1 - Cadastro</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-    <div class="glass">
-        <h1>Projeto de JavaScript - Laboratório de Engenharia de Software</h1>
-        <h2>Exercício 1 - Placeholder</h2>
-        <p>Placeholder</p>
-        <div style="margin-top:18px;">
-            <a href="semana04.html" class="btn btn-outline-secondary ms-2">Voltar</a>
-        </div>
-    </div>
+  <div class="glass">
+    <div class="form-container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="form-title">Formulário de Cadastro:</div>
+      </div>
 
-    <script>
-        
-    </script>
+      <form id="cadForm" novalidate>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="row row-gap">
+              <div class="col-12">
+                <label class="field-label" for="nome">Nome:</label>
+                <input id="nome" name="nome" class="form-control custom" placeholder="Digite seu nome completo" />
+                <div id="err-nome" class="error-msg" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="row row-gap">
+              <div class="col-8">
+                <label class="field-label" for="email">Email:</label>
+                <input id="email" name="email" class="form-control custom" placeholder="Digite seu email" />
+                <div id="err-email" class="error-msg" aria-live="polite"></div>
+              </div>
+              <div class="col-4">
+                <label class="field-label" for="data_nascimento">Data Nascimento:</label>
+                <div class="date-group">
+                  <input id="data_nascimento" name="data_nascimento" class="form-control custom"
+                    placeholder="dd/mm/aaaa" />
+                  <button type="button" class="date-btn" id="dateBtn" title="Abrir calendário">📅</button>
+                  <input type="date" id="data_native" style="display:none;" />
+                </div>
+                <div id="err-data" class="error-msg" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="row row-gap">
+              <div class="col-md-6">
+                <label class="field-label" for="telefone_fixo">Telefone Fixo:</label>
+                <input id="telefone_fixo" name="telefone_fixo" class="form-control custom" placeholder="(99)9999-9999"
+                  maxlength="14" />
+                <div id="err-telfixo" class="error-msg" aria-live="polite"></div>
+              </div>
+              <div class="col-md-6">
+                <label class="field-label" for="telefone_cel">Telefone Celular:</label>
+                <input id="telefone_cel" name="telefone_cel" class="form-control custom" placeholder="(99)99999-9999"
+                  maxlength="15" />
+                <div id="err-telcel" class="error-msg" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="row row-gap" id="alunoSection">
+              <div class="col-md-6">
+                <label class="field-label" for="curso_aluno">Curso:</label>
+                <input id="curso_aluno" name="curso_aluno" class="form-control custom" placeholder="Digite seu curso" />
+                <div id="err-cursoaluno" class="error-msg" aria-live="polite"></div>
+              </div>
+              <div class="col-md-6">
+                <label class="field-label" for="matricula">Matrícula:</label>
+                <input id="matricula" name="matricula" class="form-control custom" placeholder="Digite sua matrícula" />
+                <div id="err-matricula" class="error-msg" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <div class="row row-gap">
+              <div class="col-12">
+                <label class="field-label" for="link_lattes">Lattes / Link (se houver):</label>
+                <input id="link_lattes" name="link_lattes" class="form-control custom"
+                  placeholder="Digite aqui o endereço para seu Lattes" />
+                <div id="err-lattes" class="error-msg" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="role-group">
+              <label class="field-label">Perfil:</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="perfil" id="professor" value="professor" />
+                <label class="form-check-label" for="professor">Professor</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="perfil" id="aluno" value="aluno" checked />
+                <label class="form-check-label" for="aluno">Aluno</label>
+              </div>
+
+              <div id="profFields" style="margin-top:18px; display:none;">
+                <label class="field-label" for="area_atuacao">Área de Atuação:</label>
+                <input id="area_atuacao" name="area_atuacao" class="form-control custom"
+                  placeholder="Digite sua área de atuação" />
+                <div id="err-area" class="error-msg" aria-live="polite"></div>
+
+                <div style="margin-top:12px;">
+                  <label class="field-label" for="matricula_prof">Matrícula (professor):</label>
+                  <input id="matricula_prof" name="matricula_prof" class="form-control custom" placeholder="xxxxx"
+                    maxlength="5" />
+                  <div id="err-matriculaprof" class="error-msg" aria-live="polite"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:22px;">
+          <div class="col-12 d-flex justify-content-center gap-3">
+            <button type="submit" class="btn-custom">Enviar</button>
+            <button type="reset" class="btn-custom" id="resetBtn">Redefinir</button>
+          </div>
+        </div>
+      </form>
+
+      <div id="resultadoJson" class="mt-4"></div>
+    </div>
+    <a href="./semana04.html">Voltar</a>
+  </div>
+
+  <script>
+    class Pessoa {
+      constructor(nome, sobrenome, email, data_nascimento) {
+        this.nome = nome || ''; this.sobrenome = sobrenome || ''; this.email = email || ''; this.data_nascimento = data_nascimento || '';
+      }
+      nomeCompleto() {
+        return (this.nome + ' ' + this.sobrenome).trim();
+      }
+
+    }
+
+    class Aluno extends Pessoa {
+      constructor(nome, sobrenome, email, data_nascimento, curso, matricula, telefone_fixo, telefone_cel, link_lattes) {
+        super(nome, sobrenome, email, data_nascimento);
+        this.curso = curso || ''; this.matricula = matricula || '';
+        this.telefone_fixo = telefone_fixo || ''; this.telefone_cel = telefone_cel || '';
+        this.link_lattes = link_lattes || ''; this.role = 'aluno';
+      }
+    }
+
+    class Professor extends Pessoa {
+      constructor(nome, sobrenome, email, data_nascimento, area_atuacao, matricula, telefone_fixo, telefone_cel, link_lattes) {
+        super(nome, sobrenome, email, data_nascimento);
+        this.area_atuacao = area_atuacao || '';
+        this.matricula = matricula || '';
+        this.telefone_fixo = telefone_fixo || '';
+        this.telefone_cel = telefone_cel || '';
+        this.link_lattes = link_lattes || '';
+        this.role = 'professor';
+      }
+    }
+
+    const $ = id => document.getElementById(id);
+    function setError(id, msg) {
+      const el = $(id);
+      if (el) el.textContent = msg || '';
+    }
+
+    function splitNomeCompleto(value) {
+      const parts = String(value).trim().split(/\s+/);
+      const nome = parts.shift() || '';
+      const sobrenome = parts.join(' ') || '';
+      return { nome, sobrenome };
+    }
+
+    function validateNome() {
+      const val = $('nome').value.trim(); const errId = 'err-nome';
+      if (!val) {
+        setError(errId, 'Nome é obrigatório.');
+        return false;
+      } const re = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(?:\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+$/;
+      if (!re.test(val)) {
+        setError(errId, 'Informe nome e sobrenome (apenas letras).');
+        return false;
+      } setError(errId, ''); return true;
+    }
+
+    function validateEmail() {
+      const val = $('email').value.trim();
+      const errId = 'err-email'; if (!val) {
+        setError(errId, 'Email é obrigatório.');
+        return false;
+      } const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(val)) {
+        setError(errId, 'Email inválido');
+        return false;
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function maskDate(el) {
+      let v = el.value.replace(/\D/g, '').slice(0, 8);
+      if (v.length >= 5) el.value = v.slice(0, 2) + '/' + v.slice(2, 4) + '/' + v.slice(4);
+      else if (v.length >= 3) el.value = v.slice(0, 2) + '/' + v.slice(2);
+      else el.value = v;
+    }
+
+    function formatDateFromISO(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return '';
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear(); return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function validateData() {
+      const val = $('data_nascimento').value.trim();
+      const errId = 'err-data';
+      if (!val) {
+        setError(errId, 'Data de nascimento é obrigatória.');
+        return false;
+      }
+      const re = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const m = val.match(re);
+      if (!m) {
+        setError(errId, 'Formato dd/mm/aaaa');
+        return false;
+      }
+      const dd = Number(m[1]), mm = Number(m[2]), yyyy = Number(m[3]);
+      const d = new Date(yyyy, mm - 1, dd);
+      if (d.getFullYear() !== yyyy || d.getMonth() !== mm - 1 || d.getDate() !== dd) {
+        setError(errId, 'Data inválida');
+        false;
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function maskPhone(el) {
+      let v = el.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length <= 2) el.value = '(' + v;
+      else if (v.length <= 6) el.value = '(' + v.slice(0, 2) + ')' + v.slice(2);
+      else if (v.length <= 10) el.value = '(' + v.slice(0, 2) + ')' + v.slice(2, 6) + '-' + v.slice(6);
+      else el.value = '(' + v.slice(0, 2) + ')' + v.slice(2, 7) + '-' + v.slice(7);
+    }
+
+    function validateTelFixo() {
+      const val = $('telefone_fixo').value.trim();
+      const errId = 'err-telfixo';
+      if (!val) {
+        setError(errId, 'Telefone fixo obrigatório.');
+        return false;
+      }
+      const re = /^\(\d{2}\)\d{4}-\d{4}$/;
+      if (!re.test(val)) {
+        setError(errId, 'Formato (xx)xxxx-xxxx');
+        return false;
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function validateTelCel() {
+      const val = $('telefone_cel').value.trim();
+      const errId = 'err-telcel';
+      if (!val) {
+        setError(errId, 'Telefone celular obrigatório.');
+        return false;
+      }
+      const re9 = /^\(\d{2}\)\d{5}-\d{4}$/;
+      if (!re9.test(val)) {
+        setError(errId, 'Formato (xx)xxxxx-xxxx');
+        return false;
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function validateCursoAluno() {
+      const perfil = document.querySelector('input[name="perfil"]:checked').value;
+      const val = $('curso_aluno').value.trim();
+      const errId = 'err-cursoaluno';
+      if (perfil === 'aluno') {
+        if (!val) {
+          setError(errId, 'Curso é obrigatório para aluno.');
+          return false;
+        }
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function validateArea() {
+      const perfil = document.querySelector('input[name="perfil"]:checked').value;
+      const val = $('area_atuacao').value.trim();
+      const errId = 'err-area';
+      if (perfil === 'professor') {
+        if (!val) {
+          setError(errId, 'Área de atuação é obrigatória para professor.');
+          return false;
+        }
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function maskMatricula(el) {
+      el.value = el.value.replace(/\D/g, '');
+      const perfil = document.querySelector('input[name="perfil"]:checked').value;
+      const max = (perfil === 'professor') ? 5 : 10;
+      if (el.value.length > max) el.value = el.value.slice(0, max);
+    }
+
+    function validateMatricula() {
+      const perfil = document.querySelector('input[name="perfil"]:checked').value;
+      const errId = (perfil === 'professor') ? 'err-matriculaprof' : 'err-matricula';
+      const val = (perfil === 'professor') ? $('matricula_prof').value.trim() : $('matricula').value.trim();
+      if (!val) {
+        setError(errId, 'Matrícula é obrigatória.');
+        return false;
+      }
+      if (perfil === 'professor') {
+        if (!/^\d{5}$/.test(val)) {
+          setError(errId, 'Matrícula professor: 5 dígitos.');
+          return false;
+        }
+      }
+      else {
+        if (!/^\d{10}$/.test(val)) {
+          setError(errId, 'Matrícula aluno: 10 dígitos.');
+          return false;
+        }
+      }
+      setError(errId, '');
+      return true;
+    }
+
+    function validateLink() {
+      const val = $('link_lattes').value.trim();
+      const errId = 'err-lattes';
+      if (!val) {
+        setError(errId, 'Link Lattes é obrigatório (ou informe "-").');
+        return false;
+      }
+      if (val === '-') {
+        setError(errId, '');
+        return true;
+      }
+      try {
+        const u = new URL(val.startsWith('http') ? val : 'http://' + val);
+        setError(errId, '');
+        return true;
+      }
+      catch (e) {
+        setError(errId, 'Link inválido');
+        return false;
+      }
+    }
+
+    function onPerfilChange() {
+      const perfilEl = document.querySelector('input[name="perfil"]:checked');
+      const perfil = perfilEl ? perfilEl.value : 'aluno';
+      const profFields = $('profFields');
+      const alunoSection = $('alunoSection');
+
+      if (perfil === 'professor') {
+        if (profFields) profFields.style.display = '';
+        if (alunoSection) alunoSection.style.display = 'none';
+        const mp = $('matricula_prof'); if (mp) mp.setAttribute('maxlength', '5');
+        const m = $('matricula'); if (m) m.value = '';
+      } else {
+        if (profFields) profFields.style.display = 'none';
+        if (alunoSection) alunoSection.style.display = '';
+        const m = $('matricula'); if (m) m.setAttribute('maxlength', '10');
+        const mp = $('matricula_prof'); if (mp) mp.value = '';
+      }
+      ['err-area', 'err-cursoaluno', 'err-matriculaprof', 'err-matricula'].forEach(id => setError(id, ''));
+    }
+
+    function validateAll() {
+      const vnome = validateNome();
+      const vemail = validateEmail();
+      const vdata = validateData();
+      const vfixo = validateTelFixo();
+      const vcel = validateTelCel();
+      const vlink = validateLink();
+      const perfil = document.querySelector('input[name="perfil"]:checked') ? document.querySelector('input[name="perfil"]:checked').value : 'aluno';
+      let vmat = false, vperfil = false; if (perfil === 'professor') {
+        vmat = validateMatricula();
+        vperfil = validateArea();
+      }
+      else {
+        vmat = validateMatricula();
+        vperfil = validateCursoAluno();
+      }
+      return vnome && vemail && vdata && vfixo && vcel && vlink && vmat && vperfil;
+    }
+
+    function resetForm() {
+      ['err-nome', 'err-email', 'err-data', 'err-telfixo', 'err-telcel', 'err-curso', 'err-matricula', 'err-lattes', 'err-area', 'err-cursoaluno', 'err-matriculaprof'].forEach(id => setError(id, ''));
+      $('resultadoJson').innerHTML = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      $('nome') && $('nome').addEventListener('blur', validateNome);
+      $('email') && $('email').addEventListener('blur', validateEmail);
+      $('data_nascimento') && $('data_nascimento').addEventListener('input', (e) => maskDate(e.target));
+      $('data_nascimento') && $('data_nascimento').addEventListener('blur', validateData);
+      $('telefone_fixo') && $('telefone_fixo').addEventListener('input', (e) => maskPhone(e.target));
+      $('telefone_fixo') && $('telefone_fixo').addEventListener('blur', validateTelFixo);
+      $('telefone_cel') && $('telefone_cel').addEventListener('input', (e) => maskPhone(e.target));
+      $('telefone_cel') && $('telefone_cel').addEventListener('blur', validateTelCel);
+      $('curso_aluno') && $('curso_aluno').addEventListener('blur', validateCursoAluno);
+      $('matricula') && $('matricula').addEventListener('input', (e) => maskMatricula(e.target));
+      $('matricula') && $('matricula').addEventListener('blur', validateMatricula);
+      $('matricula_prof') && $('matricula_prof').addEventListener('input', (e) => maskMatricula(e.target));
+      $('matricula_prof') && $('matricula_prof').addEventListener('blur', validateMatricula);
+      $('link_lattes') && $('link_lattes').addEventListener('blur', validateLink);
+
+      // profile radios
+      document.querySelectorAll('input[name="perfil"]').forEach(r => r.addEventListener('change', onPerfilChange));
+
+      // date button
+      $('dateBtn') && $('dateBtn').addEventListener('click', () => {
+        const native = $('data_native');
+        try {
+          native.showPicker && native.showPicker();
+
+        }
+        catch (e) { }
+        native && native.click();
+      });
+      $('data_native') && $('data_native').addEventListener('change', function () {
+        $('data_nascimento').value = formatDateFromISO(this.value);
+        validateData();
+      });
+
+      // form submit/reset
+      document.getElementById('cadForm').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        if (!validateAll()) {
+          alert('Existem campos inválidos. Corrija antes de enviar.');
+          return;
+        }
+        const nomeRaw = $('nome').value.trim();
+        const parts = splitNomeCompleto(nomeRaw);
+        const email = $('email').value.trim();
+        const data_nascimento = $('data_nascimento').value.trim();
+        const telefone_fixo = $('telefone_fixo').value.trim();
+        const telefone_cel = $('telefone_cel').value.trim();
+        const link_lattes = $('link_lattes').value.trim();
+        const perfil = document.querySelector('input[name="perfil"]:checked') ? document.querySelector('input[name="perfil"]:checked').value : 'aluno';
+        let personObj = null;
+        if (perfil === 'aluno') {
+          const curso_aluno = $('curso_aluno').value.trim();
+          const matricula = $('matricula').value.trim();
+          personObj = new Aluno(parts.nome, parts.sobrenome, email, data_nascimento, curso_aluno, matricula, telefone_fixo, telefone_cel, link_lattes);
+        }
+        else {
+          const area = $('area_atuacao').value.trim();
+          const matricula = $('matricula_prof').value.trim();
+          personObj = new Professor(parts.nome, parts.sobrenome, email, data_nascimento, area, matricula, telefone_fixo, telefone_cel, link_lattes);
+        }
+        $('resultadoJson').innerHTML = '<pre style="background:#f6f6f6;padding:12px;border-radius:6px;color:#111;">' + JSON.stringify(personObj, null, 2) + '</pre>';
+        console.log('Objeto salvo:', personObj);
+        alert('Cadastro válido — objeto criado (ver resultado no final do formulário).');
+      });
+      document.getElementById('resetBtn') && document.getElementById('resetBtn').addEventListener('click', resetForm);
+
+      // initial state
+      onPerfilChange();
+    });
+  </script>
 </body>
 
 </html>
