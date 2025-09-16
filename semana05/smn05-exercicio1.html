@@ -4,23 +4,283 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Semana 5 - Exercício 1 - Placeholder</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Exercício 1 - Contador de Pessoas</title>
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-  <div class="glass">
-    <h1>Projeto de JavaScript - Laboratório de Engenharia de Software</h1>
-    <h2>Exercício 1 - Placeholder</h2>
-    <p>Placeholder</p>
-    <div style="margin-top:18px;">
-      <a href="semana05.html" class="btn btn-outline-secondary ms-2">Voltar</a>
-    </div>
+  <div id="exercicio" class="glass">
+    <a href="semana05.html" class="btn btn-outline-secondary ms-2">Voltar</a>
   </div>
 
   <script>
+    (function () {
+      // --- configurações iniciais ---
+      const INIT_MEN = 0;
+      const INIT_WOMEN = 0;
 
+      let men = INIT_MEN;
+      let women = INIT_WOMEN;
+
+      // Referências
+      const root = document.getElementById('exercicio');
+
+      // Criar container principal
+      const container = document.createElement('div');
+      container.className = 'glass-card card-max-400';
+
+      // Estilo inline para centralizar e ajustar padding
+      container.style.padding = '22px';
+      container.style.position = 'relative';
+      container.style.margin = '12px auto';
+      container.style.background = 'white';
+      container.style.color = '#222';
+      container.style.maxWidth = '360px';
+      container.style.borderRadius = '10px';
+      container.style.boxShadow = '0 6px 24px rgba(0,0,0,0.15)';
+      root.appendChild(container);
+
+      // --- Cabeçalho / Título ---
+      const title = document.createElement('h2');
+      title.innerText = 'Contador de Pessoas';
+      title.style.margin = '6px 0 14px 0';
+      title.style.fontSize = '1.4rem';
+      title.style.color = '#111';
+      title.style.textAlign = 'center';
+      container.appendChild(title);
+
+      // Área superior com Total e botão de reset
+      const topArea = document.createElement('div');
+      topArea.style.display = 'flex';
+      topArea.style.justifyContent = 'center';
+      topArea.style.alignItems = 'center';
+      topArea.style.gap = '12px';
+      topArea.style.marginBottom = '12px';
+      container.appendChild(topArea);
+
+      // Total label (vertical column)
+      const totalCol = document.createElement('div');
+      totalCol.style.display = 'flex';
+      totalCol.style.flexDirection = 'column';
+      totalCol.style.alignItems = 'center';
+      topArea.appendChild(totalCol);
+
+      const totalLabel = document.createElement('div');
+      totalLabel.innerText = 'Total';
+      totalLabel.style.fontSize = '1.3rem';
+      totalLabel.style.fontWeight = '700';
+      totalLabel.style.color = '#000';
+      totalCol.appendChild(totalLabel);
+
+      const totalBox = document.createElement('div');
+      totalBox.style.marginTop = '8px';
+      totalBox.style.border = '2px solid rgba(0,0,0,0.12)';
+      totalBox.style.borderRadius = '8px';
+      totalBox.style.padding = '8px 20px';
+      totalBox.style.minWidth = '72px';
+      totalBox.style.textAlign = 'center';
+      totalBox.style.fontWeight = '700';
+      totalBox.style.fontSize = '1.2rem';
+      totalBox.innerText = (men + women).toString();
+      totalCol.appendChild(totalBox);
+
+      // Reset/refresh button no canto superior direito (absoluto)
+      const resetBtn = document.createElement('button');
+      resetBtn.setAttribute('aria-label', 'Resetar contadores');
+      resetBtn.title = 'Resetar para valores iniciais';
+      resetBtn.style.position = 'absolute';
+      resetBtn.style.right = '12px';
+      resetBtn.style.top = '12px';
+      resetBtn.style.border = 'none';
+      resetBtn.style.background = 'transparent';
+      resetBtn.style.cursor = 'pointer';
+      resetBtn.style.padding = '6px';
+      resetBtn.style.borderRadius = '50%';
+      resetBtn.innerHTML = `
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12a9 9 0 10-2.8 6.1" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M21 3v6h-6" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `;
+      container.appendChild(resetBtn);
+
+      resetBtn.addEventListener('click', () => {
+        men = INIT_MEN;
+        women = INIT_WOMEN;
+        updateDisplays();
+      });
+
+      // area com ícones e controles (dois colunas)
+      const twoCol = document.createElement('div');
+      twoCol.style.display = 'flex';
+      twoCol.style.justifyContent = 'space-between';
+      twoCol.style.margin = '12px 6px 6px 6px';
+      container.appendChild(twoCol);
+
+      // função utilitária para criar uma coluna (sexo)
+      function createPersonColumn(kind) {
+        // kind = 'men' or 'women'
+        const col = document.createElement('div');
+        col.style.flex = '1';
+        col.style.display = 'flex';
+        col.style.flexDirection = 'column';
+        col.style.alignItems = 'center';
+        col.style.gap = '8px';
+        col.style.padding = '6px';
+        col.style.minWidth = '120px';
+
+        // avatar (SVG)
+        const avatarWrap = document.createElement('div');
+        avatarWrap.style.width = '110px';
+        avatarWrap.style.height = '90px';
+        avatarWrap.style.display = 'flex';
+        avatarWrap.style.justifyContent = 'center';
+        avatarWrap.style.alignItems = 'center';
+        avatarWrap.innerHTML = kind === 'men' ? maleSVG() : femaleSVG();
+        col.appendChild(avatarWrap);
+
+        // controls (plus and minus)
+        const controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.justifyContent = 'center';
+        controls.style.alignItems = 'center';
+        controls.style.gap = '14px';
+        controls.style.marginTop = '6px';
+        col.appendChild(controls);
+
+        const plusBtn = document.createElement('button');
+        plusBtn.className = 'btn';
+        plusBtn.setAttribute('aria-label', kind + '-adicionar');
+        plusBtn.title = 'Adicionar';
+        styleCircleButton(plusBtn, true);
+        plusBtn.innerHTML = '<span style="font-size:20px; font-weight:700; line-height:0;">+</span>';
+        controls.appendChild(plusBtn);
+
+        const minusBtn = document.createElement('button');
+        minusBtn.className = 'btn';
+        minusBtn.setAttribute('aria-label', kind + '-remover');
+        minusBtn.title = 'Remover';
+        styleCircleButton(minusBtn, false);
+        minusBtn.innerHTML = '<span style="font-size:20px; font-weight:700; line-height:0;">−</span>';
+        controls.appendChild(minusBtn);
+
+        // label
+        const label = document.createElement('div');
+        label.style.marginTop = '8px';
+        label.style.fontSize = '1rem';
+        label.style.fontWeight = '600';
+        label.style.color = '#222';
+        label.innerText = kind === 'men' ? 'Homens' : 'Mulheres';
+        col.appendChild(label);
+
+        // counter box
+        const countBox = document.createElement('div');
+        countBox.style.marginTop = '8px';
+        countBox.style.border = '2px solid rgba(0,0,0,0.12)';
+        countBox.style.borderRadius = '8px';
+        countBox.style.padding = '8px 18px';
+        countBox.style.minWidth = '60px';
+        countBox.style.textAlign = 'center';
+        countBox.style.fontWeight = '700';
+        countBox.style.fontSize = '1.05rem';
+        countBox.style.background = '#fff';
+        countBox.innerText = kind === 'men' ? men.toString() : women.toString();
+        col.appendChild(countBox);
+
+        // eventos
+        plusBtn.addEventListener('click', () => {
+          if (kind === 'men') { men++; } else { women++; }
+          updateDisplays();
+        });
+        minusBtn.addEventListener('click', () => {
+          if (kind === 'men') {
+            if (men > 0) men--;
+          } else {
+            if (women > 0) women--;
+          }
+          updateDisplays();
+        });
+
+        return { col, countBox, plusBtn, minusBtn };
+      }
+
+      function styleCircleButton(btn, positive) {
+        btn.style.width = '44px';
+        btn.style.height = '44px';
+        btn.style.borderRadius = '50%';
+        btn.style.border = 'none';
+        btn.style.cursor = 'pointer';
+        btn.style.display = 'inline-flex';
+        btn.style.justifyContent = 'center';
+        btn.style.alignItems = 'center';
+        btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.12)';
+        btn.style.fontSize = '18px';
+        btn.style.fontWeight = '700';
+        btn.style.color = '#fff';
+        btn.style.background = positive ? 'rgba(76,175,80,0.95)' : 'rgba(244,67,54,0.95)';
+      }
+
+      // svg helper functions
+      function maleSVG() {
+        return `
+        <svg width="100" height="80" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <circle cx="32" cy="18" r="10" fill="#f2d9c9"/>
+            <path d="M12 56c0-8 8-14 20-14s20 6 20 14" fill="#2b8db9"/>
+            <path d="M12 42c6-6 18-8 20-8s14 2 20 8" fill="#5bb1dd"/>
+          </g>
+        </svg>
+      `;
+      }
+
+      function femaleSVG() {
+        return `
+        <svg width="100" height="80" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <circle cx="32" cy="18" r="10" fill="#f2d9c9"/>
+            <path d="M12 56c0-8 8-14 20-14s20 6 20 14" fill="#b356a3"/>
+            <path d="M12 42c6-6 18-8 20-8s14 2 20 8" fill="#ff7ae9"/>
+          </g>
+        </svg>
+      `;
+      }
+
+      // criar colunas
+      const menColObj = createPersonColumn('men');
+      const womenColObj = createPersonColumn('women');
+      twoCol.appendChild(menColObj.col);
+      twoCol.appendChild(womenColObj.col);
+
+      // função para atualizar mostradores
+      function updateDisplays() {
+        // atualiza boxes
+        menColObj.countBox.innerText = men.toString();
+        womenColObj.countBox.innerText = women.toString();
+        totalBox.innerText = (men + women).toString();
+
+        // habilitar/desabilitar botões de "-" se 0
+        menColObj.minusBtn.disabled = men <= 0;
+        womenColObj.minusBtn.disabled = women <= 0;
+
+        menColObj.minusBtn.style.opacity = men <= 0 ? '0.5' : '1';
+        womenColObj.minusBtn.style.opacity = women <= 0 ? '0.5' : '1';
+      }
+
+      // inicializa displays
+      updateDisplays();
+
+      // algumas melhorias de acessibilidade (tecla Enter/Space nos botões)
+      container.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          const t = e.target;
+          if (t.tagName === 'BUTTON') {
+            t.click();
+            e.preventDefault();
+          }
+        }
+      });
+
+    })();
   </script>
 </body>
 

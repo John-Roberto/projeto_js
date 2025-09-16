@@ -74,7 +74,8 @@ li {
     margin: 15px 0;
 }
 
-a {
+a,
+#exercicio a {
     color: #40E0D0;
     text-decoration: none;
     font-size: 20px;
