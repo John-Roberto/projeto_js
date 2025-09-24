@@ -4,14 +4,179 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Exercício 1 - Calculadora</title>
+    <title>Calculadora - Corrigido</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
-    <div id="exercicio" class="glass">
-        <a href="semana06.html" class="btn btn-outline-secondary ms-2">Voltar</a>
-    </div>
+    <div id="exercise-root"></div>
+
+    <script>
+        (function () {
+            const root = document.getElementById('exercise-root');
+
+            // cria estrutura
+            const wrap = document.createElement('div');
+            wrap.className = 'calc-wrap';
+
+            const card = document.createElement('div');
+            card.className = 'calc-card';
+
+            // top dots
+            const topbar = document.createElement('div'); topbar.className = 'calc-topbar';
+            ['red', 'yellow', 'green'].forEach(c => { const d = document.createElement('div'); d.className = 'dot ' + c; topbar.appendChild(d); });
+            card.appendChild(topbar);
+
+            // display
+            const displayRow = document.createElement('div'); displayRow.className = 'calc-display';
+            const valueEl = document.createElement('div'); valueEl.className = 'value'; valueEl.textContent = '0';
+            displayRow.appendChild(valueEl);
+            card.appendChild(displayRow);
+
+            // grid
+            const grid = document.createElement('div'); grid.className = 'btn-grid';
+
+            function makeBtn(text, cls = '', aria = null) {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'calc-btn ' + cls;
+                b.textContent = text;
+                if (aria) b.setAttribute('aria-label', aria);
+                return b;
+            }
+
+            // cria botões
+            const btnAC = makeBtn('AC', 'btn-fn', 'clear');
+            const btnSign = makeBtn('+/-', 'btn-fn', 'invert');
+            const btnPercent = makeBtn('%', 'btn-fn', 'percent');
+            const btnDiv = makeBtn('÷', 'btn-op', 'divide');
+
+            const btn7 = makeBtn('7', 'btn-num', '7');
+            const btn8 = makeBtn('8', 'btn-num', '8');
+            const btn9 = makeBtn('9', 'btn-num', '9');
+            const btnMul = makeBtn('×', 'btn-op', 'multiply');
+
+            const btn4 = makeBtn('4', 'btn-num', '4');
+            const btn5 = makeBtn('5', 'btn-num', '5');
+            const btn6 = makeBtn('6', 'btn-num', '6');
+            const btnSub = makeBtn('−', 'btn-op', 'subtract');
+
+            const btn1 = makeBtn('1', 'btn-num', '1');
+            const btn2 = makeBtn('2', 'btn-num', '2');
+            const btn3 = makeBtn('3', 'btn-num', '3');
+            const btnAdd = makeBtn('+', 'btn-op', 'add');
+
+            const btnIcon = makeBtn('🖩', 'btn-fn', 'calc-icon');
+            const btn0 = makeBtn('0', 'btn-num btn-zero', '0');
+            const btnDec = makeBtn(',', 'btn-dec', 'decimal');
+            const btnEq = makeBtn('=', 'btn-op btn-eq', 'equals');
+
+            // append na ordem
+            [
+                btnAC, btnSign, btnPercent, btnDiv,
+                btn7, btn8, btn9, btnMul,
+                btn4, btn5, btn6, btnSub,
+                btn1, btn2, btn3, btnAdd,
+                btnIcon, btn0, btnDec, btnEq
+            ].forEach(b => grid.appendChild(b));
+
+            grid.style.gridTemplateColumns = 'repeat(4, 64px)';
+            grid.style.gridAutoRows = '64px';
+            grid.style.gap = '12px';
+
+            const allBtns = grid.querySelectorAll('.calc-btn');
+            allBtns.forEach(b => {
+                b.style.width = '64px';
+                b.style.height = '64px';
+                b.style.borderRadius = '50%';
+            });
+            // zero: ocupa colunas 2-3
+            btn0.style.width = 'calc(64px * 2 + 12px)'; // 2 células + gap
+            btn0.style.height = '64px';
+            btn0.style.borderRadius = '22px';
+
+            // "=": ocupa última coluna e 2 linhas; largura igual aos outros, altura dupla
+            btnEq.style.gridColumn = '4 / 5';
+            btnEq.style.gridRow = '4 / span 2';
+            btnEq.style.width = '64px';
+            btnEq.style.height = 'calc(64px * 2 + 12px)'; // duas linhas + gap
+            btnEq.style.borderRadius = '999px';
+            btnEq.style.alignSelf = 'stretch';
+            btnEq.style.justifySelf = 'center';
+
+            card.appendChild(grid);
+
+            // Voltar
+            const backLink = document.createElement('a');
+            backLink.href = 'semana06.html';
+            backLink.className = 'btn btn-outline-secondary';
+            backLink.textContent = 'Voltar';
+            card.appendChild(backLink);
+
+            wrap.appendChild(card);
+            root.appendChild(wrap);
+
+            /* --- lógica da calculadora --- */
+            let firstOperand = null, operator = null, waitingForSecond = false, displayValue = '0';
+
+            function updateDisplay() { valueEl.textContent = displayValue.replace('.', ','); }
+            function inputDigit(d) { if (waitingForSecond) { displayValue = d; waitingForSecond = false; } else { displayValue = (displayValue === '0') ? d : displayValue + d; } updateDisplay(); }
+            function inputDecimal() { if (waitingForSecond) { displayValue = '0.'; waitingForSecond = false; updateDisplay(); return; } if (!displayValue.includes('.')) { displayValue += '.'; updateDisplay(); } }
+            function handleOperator(nextOperator) {
+                const inputValue = parseFloat(displayValue);
+                if (operator && waitingForSecond) { operator = nextOperator; return; }
+                if (firstOperand === null) { firstOperand = inputValue; }
+                else if (operator) { const result = compute(firstOperand, inputValue, operator); displayValue = String(result); firstOperand = result; }
+                operator = nextOperator; waitingForSecond = true; updateDisplay();
+            }
+            function compute(a, b, op) {
+                if (op === '+') return roundAcc(a + b);
+                if (op === '-') return roundAcc(a - b);
+                if (op === '*') return roundAcc(a * b);
+                if (op === '/') return b === 0 ? 0 : roundAcc(a / b);
+                return b;
+            }
+            function roundAcc(n) { return Math.round((n + Number.EPSILON) * 1e12) / 1e12; }
+            function clearAll() { displayValue = '0'; firstOperand = null; operator = null; waitingForSecond = false; updateDisplay(); }
+            function invertSign() { if (displayValue === '0') return; displayValue = displayValue.startsWith('-') ? displayValue.slice(1) : '-' + displayValue; updateDisplay(); }
+            function percent() { const val = parseFloat(displayValue); displayValue = String(roundAcc(val / 100)); updateDisplay(); }
+            function pressEquals() { if (operator == null || waitingForSecond) return; const inputValue = parseFloat(displayValue); const result = compute(firstOperand === null ? 0 : firstOperand, inputValue, operator); displayValue = String(result); firstOperand = null; operator = null; waitingForSecond = false; updateDisplay(); }
+
+            // eventos
+            const map = {
+                '0': () => inputDigit('0'), '1': () => inputDigit('1'), '2': () => inputDigit('2'), '3': () => inputDigit('3'),
+                '4': () => inputDigit('4'), '5': () => inputDigit('5'), '6': () => inputDigit('6'),
+                '7': () => inputDigit('7'), '8': () => inputDigit('8'), '9': () => inputDigit('9')
+            };
+            btn0.addEventListener('click', map['0']); btn1.addEventListener('click', map['1']); btn2.addEventListener('click', map['2']);
+            btn3.addEventListener('click', map['3']); btn4.addEventListener('click', map['4']); btn5.addEventListener('click', map['5']);
+            btn6.addEventListener('click', map['6']); btn7.addEventListener('click', map['7']); btn8.addEventListener('click', map['8']);
+            btn9.addEventListener('click', map['9']);
+            btnDec.addEventListener('click', inputDecimal);
+            btnAC.addEventListener('click', clearAll);
+            btnSign.addEventListener('click', invertSign);
+            btnPercent.addEventListener('click', percent);
+            btnAdd.addEventListener('click', () => handleOperator('+'));
+            btnSub.addEventListener('click', () => handleOperator('-'));
+            btnMul.addEventListener('click', () => handleOperator('*'));
+            btnDiv.addEventListener('click', () => handleOperator('/'));
+            btnEq.addEventListener('click', pressEquals);
+            btnIcon.addEventListener('click', clearAll);
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key >= '0' && e.key <= '9') { inputDigit(e.key); e.preventDefault(); return; }
+                if (e.key === '.' || e.key === ',') { inputDecimal(); e.preventDefault(); return; }
+                if (e.key === '+' || e.key === '-') { handleOperator(e.key); e.preventDefault(); return; }
+                if (e.key === '*' || e.key.toLowerCase() === 'x') { handleOperator('*'); e.preventDefault(); return; }
+                if (e.key === '/') { handleOperator('/'); e.preventDefault(); return; }
+                if (e.key === 'Enter' || e.key === '=') { pressEquals(); e.preventDefault(); return; }
+                if (e.key === 'Escape') { clearAll(); e.preventDefault(); return; }
+                if (e.key === '%') { percent(); e.preventDefault(); return; }
+            });
+
+            clearAll();
+        })();
+    </script>
 </body>
 
 </html>
